@@ -13,9 +13,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Get project
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node
@@ -32,11 +31,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build web app
+      - name: Build app
         run: npm run build
 
-      - name: Add Android
-        run: npx cap add android
+      - name: Add Android platform
+        run: |
+          if [ ! -d android ]; then
+            npx cap add android
+          fi
 
       - name: Sync Android
         run: npx cap sync android
@@ -52,4 +54,4 @@ jobs:
         with:
           name: PVKTEG-debug-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
-.
+ 
